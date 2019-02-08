@@ -1,4 +1,5 @@
 #!/home/py36/bin/python3
+#-*-coding:utf-8
 
 import time
 import smtplib
@@ -23,25 +24,31 @@ class MySMTP(smtplib.SMTP):
          
         except Exception as e:
             print(e)
-            #print('mail send failed')
-        
+           
     def __msg__(self,*args):
         msg = MIMEText(args[3],self.mimetype,'utf-8')
         msg['From'] = args[0]
-        msg['To'] = args[1]
+        msg['To'] = ','.join(args[1])
         msg['Subject'] = args[2]
         
         return msg.as_string()
         
-host = 'mail.vdin.net'
-port = 25
-username ='jiangbin'
-password = 'j123456'
+#定义服务器服务器信息        
+host = MAIL_SERVER
+port = SMTP_PORT
+username = LOGIN_NAME
+password = LOGIN_PASSWORD
+
+#mimetype:邮件正文格式
+#   html:支持html格式
+#   plain:纯文本格式
 mimetype = 'html'
-mail_from ='bin.jiang@vdin.net'
-mail_to = 'jbqh@qq.com'
-subject = 'smtp plain test'
-body = '<font size=5 color=red><b>send at: %s</b></font>' % time.strftime('%F %T')
+
+#邮件信息
+mail_from = SENDER_USER_MAIL
+mail_to = [RECEIVER_USER_MAIL] #list
+subject = MAIL_SUBJECT
+body = MAIL_BODY
 
 smtp = MySMTP(host,port,username,password,mimetype)
 smtp.sendmail(mail_from,mail_to,subject,body)
